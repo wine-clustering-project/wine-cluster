@@ -1,4 +1,4 @@
-# What makes your wine of quality?
+# Wine Quality
 
 # Project Goals
 
@@ -7,12 +7,12 @@
 
 # Project Description
 
-We are looking to come up with a machine learning model that will help us see which features gives us the best indicators of wine quality and also be able to predict the quality of the wine. These wines are scored from 0 - 10 on a quality scale with 0 being very bad to 10 being very excellent. This data was collected from the vinho verde samples from Portugal. After we have explored and made our models we will recommend what features are best to help predict wine quality and give usesful insights on our data.
+We are looking to come up with a machine learning model that will help us see which features gives us the best indicators of wine quality and also be able to predict the quality of the wine. These wines are scored from 0 - 10 on a quality scale, with 0 being very bad to 10 being very excellent. This data was collected from the vinho verde samples from Portugal. After we have explored and made our models we will recommend what features are best to help predict wine quality and give usesful insights on our data.
 
 # Initial Questions
 
  1. Do red or white wines have a higher quality score?
- 2. Does alchol impact quality positivly or negativly?
+ 2. Does alcohol impact quality positively or negatively?
  3. Does ph level affect the wines differently?
  4. Is there a relationship between sugar and quality?
 
