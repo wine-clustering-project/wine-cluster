@@ -28,7 +28,7 @@ def train_val_test(df, stratify = None):
     return train, validate, test
  
     
-    def the_split(df, stratify= None):
+def the_split(df, stratify= None):
         
         """ This functions is used to split the data into 3 different datasets: train, validate(val), and test.
             It then then returns the seperate datasets and prints the shape for each of them.
