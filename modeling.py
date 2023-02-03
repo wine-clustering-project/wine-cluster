@@ -9,7 +9,7 @@ import explore as e
 from scipy import stats
 from sklearn.cluster import KMeans
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, PolynomialFeatures
 from sklearn.feature_selection import f_regression, SelectKBest, RFE 
 from sklearn.linear_model import LinearRegression, LassoLars, TweedieRegressor
 from sklearn.metrics import mean_squared_error
@@ -28,19 +28,15 @@ def combined_df(df, f1, f2):
     return df
 
 
-columns_scale = train.iloc[:, :11]
-columns_to_scale = columns_scale.columns
-
-def mvp_scaled_data(train, 
-               validate, 
-               test, 
-               columns_to_scale = columns_to_scale,
-               return_scaler=False):
+def mvp_scaled_data(train, validate, test, return_scaler=False):
     '''
     Scales the 3 data splits. 
     Takes in train, validate, and test data splits and returns their scaled counterparts.
     If return_scalar is True, the scaler object will be returned as well
     '''
+    columns_scale = train.iloc[:, :11]
+    columns_to_scale = columns_scale.columns
+    
     # make copies of our original data so we dont gronk up anything
     train_scaled = train.copy()
     validate_scaled = validate.copy()

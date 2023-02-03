@@ -63,7 +63,7 @@ def clustering(train, f1, f2):
     mm_scaler = MinMaxScaler()
     X[[f1, f2]] = mm_scaler.fit_transform(X[[f1, f2]])
     
-    kmeans_scale = KMeans(n_clusters=3, random_state = 22)
+    kmeans_scale = KMeans(n_clusters = 4, random_state = 22)
     kmeans_scale.fit(X[[f1, f2]])
     kmeans_scale.predict(X[[f1, f2]])
     
