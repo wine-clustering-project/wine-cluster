@@ -26,4 +26,22 @@ def train_val_test(df, stratify = None):
     validate, test = train_test_split(test, test_size = 0.5, random_state = seed, stratify = None)
     
     return train, validate, test
- kh
+ 
+    
+    def clean_wine(df):
+        
+    """ This functions is used to split the data into 3 different datasets: train, validate(val), and test.
+        It then then returns the seperate datasets and prints the shape for each of them.
+    """
+        
+    # train/validate/test split and is reproducible due to random_state = 123
+    train_validate, test= train_test_split(df, test_size= .2, random_state= 7)
+    train, val= train_test_split(train_validate, test_size= .3, random_state= 7)
+    
+    print(f'Train shape: {train.shape}\n' )
+    
+    print(f'Validate shape: {val.shape}\n' )
+    
+    print(f'Test shape: {test.shape}')
+    
+    return train, val, test
