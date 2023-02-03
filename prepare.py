@@ -29,14 +29,10 @@ def train_val_test(df, stratify = None):
  
     
 def the_split(df, stratify= None):
-<<<<<<< HEAD
-    
-=======
-        
+
     """ This functions is used to split the data into 3 different datasets: train, validate(val), and test.
         It then then returns the seperate datasets and prints the shape for each of them.
     """
->>>>>>> 7027c1f222fbe4ba5f1e7643e81ccf12cabe28c4
         
     # train/validate/test split and is reproducible due to random_state = 123
     train_validate, test= train_test_split(df, test_size= .2, random_state= 7)
