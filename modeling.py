@@ -108,6 +108,10 @@ def linear_model(X_train, y_train):
     Giving us a dataframe of predicted linear and actual values
     '''
     
+     '''
+        This function is used to get a liner model. The results will be used on the validate dataset.
+     '''
+    
     lm = LinearRegression()
 
     lm.fit(X_train, y_train)
@@ -124,6 +128,12 @@ def linear_model(X_train, y_train):
 
 
 def lasso_lars(X_train, y_train):
+    
+     '''
+        This function is used to run a for loop on lasso lars. We will use the best preforming model,
+        and use it on the validate datasets.
+     '''
+    
     metrics = []
 
     for i in np.arange(0.05, 1, .05):
@@ -152,6 +162,12 @@ def lasso_lars(X_train, y_train):
 
 
 def tweedie_models(X_train, y_train):
+    
+     '''
+        This function is used to run a for loop on tweedie model. We will use the best preforming model,
+        and use it on the validate datasets.
+    '''
+    
     metrics = []
 
     for i in range(0, 4, 1):
@@ -180,6 +196,12 @@ def tweedie_models(X_train, y_train):
 
 
 def linear_poly(X_train, y_train):
+    
+    '''
+        This function is used to run a for loop on liner poly. We will use the best preforming model,
+        and use it on the validate datasets.
+    '''
+    
     metrics = []
 
     for i in range(2,4):
@@ -212,7 +234,11 @@ def linear_poly(X_train, y_train):
 
 
 def validate_models(X_train, y_train, X_validate, y_validate):
-   
+    '''
+            This model is used to test our models on the validate datasets and then return the results. 
+            These results will then be used to find our best model.
+    '''
+       
     lm = LinearRegression()
 
     lm.fit(X_train, y_train)
@@ -271,6 +297,20 @@ def validate_models(X_train, y_train, X_validate, y_validate):
 
 
 def test_model(X_train, y_train, X_test, y_test):
+<<<<<<< HEAD
+=======
+    
+    '''
+        This function is used to test our best model and use it on the test datasets to get our final results.
+    '''
+    
+    pf = PolynomialFeatures(degree = 3)
+
+    pf.fit(X_train, y_train)
+    X_train = pf.transform(X_train)
+
+    X_test = pf.transform(X_test)
+>>>>>>> 9bc436ed79aaf72329e27f77e901f3d7e6a36b5f
 
     lm = LinearRegression()
 
@@ -288,6 +328,11 @@ def test_model(X_train, y_train, X_test, y_test):
 
 
 def best_models(X_train, y_train, X_validate, y_validate):
+    
+    '''
+        This function uses the train and validate datasets and returns the results of the best preforming model 
+        for each algorithm. The results are returned as a dataframe.
+    '''
     
     lm_rmse = linear_model(X_train, y_train).iloc[0,1]
     
@@ -312,6 +357,10 @@ def best_models(X_train, y_train, X_validate, y_validate):
 
 def best_model(X_train, y_train, X_validate, y_validate, X_test, y_test):
     
+    '''
+        Takes in our datasets, gets the best preforming model, and runs it on the test datasets.
+        Then it returns the results as a dataframe.
+    '''
     df = best_models(X_train, y_train, X_validate, y_validate).iloc[1]
     
     df['test_rmse'] = test_model(X_train, y_train, X_test, y_test)
