@@ -19,6 +19,9 @@ from math import sqrt
 
 
 def combined_df(df, f1, f2):
+    '''
+    This function calls another function in explore.py and merges a column to the original dataset
+    '''
     
     X = e.clustering(df, f1, f2)
     
@@ -62,6 +65,11 @@ def mvp_scaled_data(train, validate, test, return_scaler=False):
     
     
 def splitting_subsets(train, train_scaled, validate_scaled, test_scaled):
+    '''
+    This function splits our train, validate, and test scaled datasets into X/y train,
+    validate, and test subsets
+    '''
+    
     
     X_train = train_scaled.drop(columns = ['quality'])
     X_train = pd.get_dummies(X_train, columns = ['type', 'scaled_clusters'])
@@ -81,6 +89,9 @@ def splitting_subsets(train, train_scaled, validate_scaled, test_scaled):
 
 
 def baseline(y_train):
+    '''
+    This function takes in y_train to calculate the baseline rmse
+    '''
     
     preds_df = pd.DataFrame({'actual': y_train})
     
@@ -92,6 +103,10 @@ def baseline(y_train):
 
 
 def linear_model(X_train, y_train):
+    '''
+    This function makes a linear regression model, fits, and predicts the output values.
+    Giving us a dataframe of predicted linear and actual values
+    '''
     
     lm = LinearRegression()
 
@@ -239,33 +254,44 @@ def validate_models(X_train, y_train, X_validate, y_validate):
     
     poly_validate_rmse = sqrt(mean_squared_error(val_preds_df.actual_val, val_preds_df['poly_vals']))
 
-    return lm_rmse_val, tweedie_rmse_val, poly_validate_rmse
+    #lasso_lars model
+    
+    lasso = LassoLars(alpha = .05 )
+    
+    lasso.fit(X_train, y_train)
+    
+    lasso_val = lasso.predict(X_validate)
+    
+    val_preds_df['lasso_preds'] = lasso_val
+
+    lasso_rmse_val = sqrt(mean_squared_error(val_preds_df.actual_val, val_preds_df['lasso_preds']))
+    
+    
+    return lm_rmse_val, tweedie_rmse_val, lasso_rmse_val, poly_validate_rmse
 
 
 def test_model(X_train, y_train, X_test, y_test):
-    
-    pf = PolynomialFeatures(degree = 3)
-
-    pf.fit(X_train, y_train)
-    X_train = pf.transform(X_train)
-
-    X_test = pf.transform(X_test)
 
     lm = LinearRegression()
+
     lm.fit(X_train, y_train)
+    
+    lm_preds = lm.predict(X_test)
 
     test_preds_df = pd.DataFrame({'actual_test': y_test})
 
-    test_preds_df['poly_test'] = lm.predict(X_test)
+    test_preds_df['linear_test'] = lm.predict(X_test)
 
-    poly_test_rmse = sqrt(mean_squared_error(test_preds_df.actual_test, test_preds_df['poly_test']))
+    linear_test_rmse = sqrt(mean_squared_error(test_preds_df.actual_test, test_preds_df['linear_test']))
     
-    return poly_test_rmse
+    return linear_test_rmse
 
 
 def best_models(X_train, y_train, X_validate, y_validate):
     
     lm_rmse = linear_model(X_train, y_train).iloc[0,1]
+    
+    lasso_rmse = lasso_lars(X_train, y_train).iloc[0,1]
     
     tweedie_rmse = tweedie_models(X_train, y_train).iloc[0,1]
         
@@ -273,11 +299,11 @@ def best_models(X_train, y_train, X_validate, y_validate):
     
     baseline_rmse = baseline(y_train)
     
-    lm_rmse_val, tweedie_rmse_val, poly_validate_rmse = validate_models(X_train, y_train, X_validate, y_validate)
+    lm_rmse_val, tweedie_rmse_val, lasso_rmse_val, poly_validate_rmse = validate_models(X_train, y_train, X_validate, y_validate)
     
-    df = pd.DataFrame({'model': ['linear', 'tweedie', 'linear_poly', 'baseline'],
-                      'train_rmse': [lm_rmse, tweedie_rmse, poly_rmse, baseline_rmse],
-                      'validate_rmse': [lm_rmse_val, tweedie_rmse_val, poly_validate_rmse, baseline_rmse]})
+    df = pd.DataFrame({'model': ['linear', 'tweedie', 'lasso_lars','linear_poly', 'baseline'],
+                      'train_rmse': [lm_rmse, tweedie_rmse, lasso_rmse, poly_rmse,  baseline_rmse],
+                      'validate_rmse': [lm_rmse_val, tweedie_rmse_val, lasso_rmse_val, poly_validate_rmse, baseline_rmse]})
     
     df['difference'] = df['train_rmse'] - df['validate_rmse']
     
@@ -290,6 +316,8 @@ def best_model(X_train, y_train, X_validate, y_validate, X_test, y_test):
     
     df['test_rmse'] = test_model(X_train, y_train, X_test, y_test)
     
+    df = pd.DataFrame(df).T
+    
     df = df.drop(columns = ['difference'])
 
-    return pd.DataFrame(df).T
+    return df

@@ -6,6 +6,10 @@ from sklearn.model_selection import train_test_split
 
 
 def clean_wine_data(df):
+    '''
+        This function is used to take in the df columns and lower case and replace space with an underscore
+    '''
+    
     
     df.columns = df.columns.str.lower().str.replace(' ', '_')
 

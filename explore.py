@@ -11,7 +11,9 @@ from sklearn.preprocessing import MinMaxScaler
 
 
 def barplot(df, f1, f2):
-    
+    '''
+    This function is to create a barplot using a dataframe and 2 features as f1 and f2
+    '''
     sns.set(style="white", rc={"grid.linewidth": 0.0})
     ax = sns.barplot(data = df, x = f1, y= f2, hue= 'type', hue_order = ['white', 'red'],
                 color = 'firebrick', ec = 'black', alpha = .8)
@@ -24,6 +26,9 @@ def barplot(df, f1, f2):
 
 
 def barplot2(df, f1, f2):
+    '''
+    This function is to create a barplot using a dataframe and 2 features as f1 and f2
+    '''
     
     sns.set(style="white", rc={"grid.linewidth": 0.0})
     
@@ -35,6 +40,10 @@ def barplot2(df, f1, f2):
 
 
 def ph_quality(train):
+    '''
+    This function is to create a barplot using a train dataset
+    '''
+    
     sns.set(style="white", rc={"grid.linewidth": 0.0})   
     sns.barplot(data = train, x = 'quality', y= 'ph', color = 'firebrick', hue= 'type',alpha = .8, ec = 'black',)
     plt.legend(loc= 'lower right')
@@ -61,6 +70,9 @@ def chi_test(feature, df):
     
 
 def clustering(train, f1, f2):
+    '''
+    This function is creating unscaled and scaled clusters and adding columns to the dataset
+    '''
     
     seed = 22
     
@@ -85,6 +97,9 @@ def clustering(train, f1, f2):
    
 
 def cluster_relplot(df, f1, f2):
+    '''
+    this functions creates a relplot of the clusters
+    '''
     
     sns.set(style = "whitegrid")
     
@@ -98,6 +113,9 @@ def cluster_relplot(df, f1, f2):
 
 
 def best_cluster(df, f1, f2):
+    '''
+    This function makes a graph to show the most optimal cluster number
+    '''
     
     X = clustering(df, f1, f2)
     
@@ -129,6 +147,9 @@ def best_cluster(df, f1, f2):
 
 
 def qual_den(train):
+    '''
+    A function to run a 2 sample test and get the results
+    '''
     
     alpha =0.05
     den= train.density
