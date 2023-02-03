@@ -13,27 +13,30 @@ from sklearn.preprocessing import MinMaxScaler
 def barplot(df, f1, f2):
     
     sns.set(style="white", rc={"grid.linewidth": 0.0})
+    ax = sns.barplot(data = df, x = f1, y= f2, hue= 'type', hue_order = ['white', 'red'],
+                color = 'firebrick', ec = 'black', alpha = .8)
     
-    sns.barplot(data = df, x = f1, y= f2, color = 'dodgerblue', alpha = .8, ec = 'black',)
-    
+    plt.legend(loc='center', bbox_to_anchor=(0.5, -.2), ncol=2)
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=0, ha='center')
     plt.title(f'Quality Score Compared To {f1.title()}')
     
     return plt.show()
+
 
 def barplot2(df, f1, f2):
     
     sns.set(style="white", rc={"grid.linewidth": 0.0})
     
-    sns.barplot(data = df, x = f1, y= f2, color = 'dodgerblue', alpha = .8, ec = 'black',)
+    sns.barplot(data = df, x = f1, y= f2, color = 'firebrick', alpha = .8, ec = 'black',)
     
     plt.title(f'Quality Score Compared To {f2.title()}')
     
     return plt.show()
 
 
-def ph_quality():
+def ph_quality(train):
     sns.set(style="white", rc={"grid.linewidth": 0.0})   
-    sns.barplot(data = train, x = 'quality', y= 'ph', color = 'firebrick', hue= 'type',alpha = 1, ec = 'black',)
+    sns.barplot(data = train, x = 'quality', y= 'ph', color = 'firebrick', hue= 'type',alpha = .8, ec = 'black',)
     plt.legend(loc= 'lower right')
     plt.xlabel('Quality of The Wine')
     plt.ylabel('Ph Level of The Wine')
@@ -89,6 +92,8 @@ def cluster_relplot(df, f1, f2):
     
     sns.relplot(data = X, x = f1, y = f2, hue = 'scaled_clusters')
     
+    plt.title('Clusters')
+    
     return plt.show() 
 
 
@@ -118,4 +123,17 @@ def best_cluster(df, f1, f2):
     plt.annotate("optimal cluster", xy=point, xytext=(5, 125), 
                  arrowprops=dict(facecolor='black', shrink=0.05))
     
+    plt.title('The Best Cluster')
+    
     return plt.show()
+
+
+def qual_den(train):
+    
+    alpha =0.05
+    den= train.density
+    qua= train.quality
+    t, p = stats.ttest_ind(den, qua, equal_var=False)
+    print("Are we able to reject the Null Hypothesis?:", p < alpha)
+    print(f't = {t:.3f}')
+    print(f'p-value = {p}')
