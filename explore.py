@@ -31,6 +31,15 @@ def barplot2(df, f1, f2):
     return plt.show()
 
 
+def ph_quality():
+    sns.set(style="white", rc={"grid.linewidth": 0.0})   
+    sns.barplot(data = train, x = 'quality', y= 'ph', color = 'firebrick', hue= 'type',alpha = 1, ec = 'black',)
+    plt.legend(loc= 'lower right')
+    plt.xlabel('Quality of The Wine')
+    plt.ylabel('Ph Level of The Wine')
+    plt.title('PH of Each Wine Type')
+
+
 def chi_test(feature, df):
     '''get result of chi-square for a feature to quality'''
     
