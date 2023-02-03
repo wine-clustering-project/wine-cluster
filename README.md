@@ -96,7 +96,7 @@ Best Model's performance:
 
 - Our best model reduced the root mean squared error by .13881 compared to the baseline results.(16% better)
 
-- RMSE 0.732087 on in-sample (train), RMSE 0.750386 on out-of-sample data (validate) and RMSE of 0.789499 on the test data.
+- RMSE 0.732087 on in-sample (train), RMSE 0.750386 on out-of-sample data (validate) and RMSE of 0.710212 on the test data.
 
 ## Recommendations
 - We would recommend using type and alcohol to build models to predict wine quality. 
