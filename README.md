@@ -13,8 +13,8 @@ We are looking to come up with a machine learning model that will help us see wh
 
  1. Do red or white wines have a higher quality score?
  2. Does alcohol impact quality positively or negatively?
- 3. Does ph level affect the wines differently?
- 4. Is there a relationship between sugar and quality?
+ 3. Does density affect the quality of the wine?
+ 4. Does ph level affect the wines differently?
 
 
 # The Plan
@@ -97,7 +97,7 @@ Best Model's performance:
 ## Recommendations
 - We would recommend using type and alcohol to build models to predict wine quality. 
 
-- We would also recommend collecting more data on what other ingredients were used such as grapes.
+- We would also recommend collecting more data on what other ingredients were used such as type of grapes.
 
 ## Next Steps
 - Remove outliers, and explore other features using clustering techniques
