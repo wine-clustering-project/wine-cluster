@@ -95,6 +95,23 @@ def baseline(y_train):
     return baseline_rmse
 
 
+def linear_model(X_train, y_train):
+    
+    lm = LinearRegression()
+
+    lm.fit(X_train, y_train)
+    
+    lm_preds = lm.predict(X_train)
+    
+    preds_df = pd.DataFrame({'actual': y_train,'lm_preds': lm_preds})
+    
+    lm_rmse = sqrt(mean_squared_error(preds_df['lm_preds'], preds_df['actual']))
+    
+    df = pd.DataFrame({'model': 'linear', 'linear_rmse': lm_rmse},index=['0']) 
+                      
+    return df
+
+
 def lasso_lars(X_train, y_train):
     metrics = []
 
@@ -180,4 +197,103 @@ def linear_poly(X_train, y_train):
         metrics.append(output)
 
     df = pd.DataFrame(metrics)    
-    return df.sort_values('poly_rmse')   
+    return df.sort_values('poly_rmse') 
+
+
+def validate_models(X_train, y_train, X_validate, y_validate):
+   
+    lm = LinearRegression()
+
+    lm.fit(X_train, y_train)
+    
+    lm_val = lm.predict(X_validate)
+    
+    val_preds_df = pd.DataFrame({'actual_val': y_validate})
+    
+    val_preds_df['lm_preds'] = lm_val
+
+    lm_rmse_val = sqrt(mean_squared_error(val_preds_df['actual_val'], val_preds_df['lm_preds']))
+
+    #tweedie model
+    
+    tweedie = TweedieRegressor(power = 1)
+    
+    tweedie.fit(X_train, y_train)
+    
+    tweedie_val = tweedie.predict(X_validate)
+    
+    val_preds_df['tweedie_preds'] = tweedie_val
+    
+    tweedie_rmse_val = sqrt(mean_squared_error(val_preds_df.actual_val, val_preds_df.tweedie_preds))
+    
+    #polynomial model
+    
+    pf = PolynomialFeatures(degree = 2)
+    
+    pf.fit(X_train, y_train)
+    
+    X_train = pf.transform(X_train)
+    X_validate = pf.transform(X_validate)
+    
+    lm2 = LinearRegression()
+    
+    lm2.fit(X_train, y_train)
+    
+    val_preds_df['poly_vals'] = lm2.predict(X_validate)
+    
+    poly_validate_rmse = sqrt(mean_squared_error(val_preds_df.actual_val, val_preds_df['poly_vals']))
+
+    return lm_rmse_val, tweedie_rmse_val, poly_validate_rmse
+
+
+def test_model(X_train, y_train, X_test, y_test):
+    
+    pf = PolynomialFeatures(degree = 3)
+
+    pf.fit(X_train, y_train)
+    X_train = pf.transform(X_train)
+
+    X_test = pf.transform(X_test)
+
+    lm = LinearRegression()
+    lm.fit(X_train, y_train)
+
+    test_preds_df = pd.DataFrame({'actual_test': y_test})
+
+    test_preds_df['poly_test'] = lm.predict(X_test)
+
+    poly_test_rmse = sqrt(mean_squared_error(test_preds_df.actual_test, test_preds_df['poly_test']))
+    
+    return poly_test_rmse
+
+
+def best_models(X_train, y_train, X_validate, y_validate):
+    
+    lm_rmse = linear_model(X_train, y_train).iloc[0,1]
+    
+    tweedie_rmse = tweedie_models(X_train, y_train).iloc[0,1]
+        
+    poly_rmse = linear_poly(X_train, y_train).iloc[1,1]
+    
+    baseline_rmse = baseline(y_train)
+    
+    lm_rmse_val, tweedie_rmse_val, poly_validate_rmse = validate_models(X_train, y_train, X_validate, y_validate)
+    
+    df = pd.DataFrame({'model': ['linear', 'tweedie', 'linear_poly', 'baseline'],
+                      'train_rmse': [lm_rmse, tweedie_rmse, poly_rmse, baseline_rmse],
+                      'validate_rmse': [lm_rmse_val, tweedie_rmse_val, poly_validate_rmse, baseline_rmse]})
+    
+    df['difference'] = df['train_rmse'] - df['validate_rmse']
+    
+    return df.sort_values('difference').reset_index().drop(columns = ('index'))
+
+
+def best_model(X_train, y_train, X_validate, y_validate, X_test, y_test):
+    
+    df = best_models(X_train, y_train, X_validate, y_validate).iloc[1]
+    
+    df['test_rmse'] = test_model(X_train, y_train, X_test, y_test)
+    
+    df = df.drop(columns = ['difference'])
+
+    return pd.DataFrame(df).T
