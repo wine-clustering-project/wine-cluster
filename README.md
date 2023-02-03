@@ -85,22 +85,21 @@ We are looking to come up with a machine learning model that will help us see wh
 - Run notebook
 
 ## Conclusions
-
-**TBD**
-
-
  
-**Best Model's performance:<br>
-My best model reduced the *TBD* compared to the baseline results.**
+Wine quality predictions were used by minimizing RMSE within our models. Type and alcohol have proven to be the most valuable, but there is still room for improvement.
+ 
+Best Model's performance:
 
-**TBD in-sample data (train),  on out-of-sample data (validate), and  on the test data when compared to the baseline RMSE.**
+- Our best model reduced the root mean squared error by .13881 compared to the baseline results.(16% better)
+
+- RMSE 0.732087 on in-sample (train), RMSE 0.750386 on out-of-sample data (validate) and RMSE of 0.789499 on the test data.
 
 ## Recommendations
-- I would recommend using TBD
+- We would recommend using type and alcohol to build models to predict wine quality. 
 
-- I would also recommend collecting more data from other countries wine samples to compare if there is a difference between the samples.
+- We would also recommend collecting more data on what other ingredients were used such as grapes.
 
 ## Next Steps
+- Remove outliers, and explore other features using clustering techniques
 
-- I would add more columns/features from the database to see if there are better relationships to help predict qualilty.
-- Consider adding different hyperparameters to models for better results.
+- Consider adding different hyperparameters to models for better results. 
